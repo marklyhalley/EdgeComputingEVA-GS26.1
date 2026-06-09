@@ -1,0 +1,681 @@
+[
+    {
+        "id": "3b379457e588837b",
+        "type": "tab",
+        "label": "Dragon Telemetry",
+        "disabled": false,
+        "info": "FIAP Global Solution 2026 — Dragon Capsule Telemetry Dashboard"
+    },
+    {
+        "id": "de66bb08dbb386b7",
+        "type": "mqtt in",
+        "z": "3b379457e588837b",
+        "name": "Sub: temperatura",
+        "topic": "dragon/telemetry/temperatura",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "mqtt_broker_cfg",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 130,
+        "y": 80,
+        "wires": [
+            [
+                "597730d6654b1841"
+            ]
+        ]
+    },
+    {
+        "id": "597730d6654b1841",
+        "type": "function",
+        "z": "3b379457e588837b",
+        "name": "Parse Temp",
+        "func": "msg.payload = msg.payload.temperatura;\nmsg.topic = 'temperatura';\nreturn msg;",
+        "outputs": 1,
+        "x": 340,
+        "y": 80,
+        "wires": [
+            [
+                "68bf776945f27837",
+                "07d3b529db2ad273"
+            ]
+        ]
+    },
+    {
+        "id": "68bf776945f27837",
+        "type": "ui_gauge",
+        "z": "3b379457e588837b",
+        "name": "Temperatura",
+        "group": "ui_group_env",
+        "order": 1,
+        "width": "3",
+        "height": "3",
+        "gtype": "gage",
+        "title": "Temperatura",
+        "label": "°C",
+        "format": "{{value | number:1}}",
+        "min": "-10",
+        "max": "50",
+        "seg1": "17",
+        "seg2": "27",
+        "x": 560,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "07d3b529db2ad273",
+        "type": "ui_chart",
+        "z": "3b379457e588837b",
+        "name": "Gráfico Temperatura",
+        "group": "ui_group_charts",
+        "order": 1,
+        "width": "6",
+        "height": "4",
+        "label": "Temperatura (°C)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Aguardando dados...",
+        "dot": false,
+        "ymin": "10",
+        "ymax": "40",
+        "removeOlder": "10",
+        "removeOlderPoints": "200",
+        "removeOlderUnit": "60",
+        "outputs": 1,
+        "x": 560,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0fa2da1a6cddbbb7",
+        "type": "mqtt in",
+        "z": "3b379457e588837b",
+        "name": "Sub: umidade",
+        "topic": "dragon/telemetry/umidade",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "mqtt_broker_cfg",
+        "inputs": 0,
+        "x": 130,
+        "y": 160,
+        "wires": [
+            [
+                "397ae6c4104a0783"
+            ]
+        ]
+    },
+    {
+        "id": "397ae6c4104a0783",
+        "type": "function",
+        "z": "3b379457e588837b",
+        "name": "Parse Umidade",
+        "func": "msg.payload = msg.payload.umidade;\nreturn msg;",
+        "outputs": 1,
+        "x": 340,
+        "y": 160,
+        "wires": [
+            [
+                "1c0f4d5fbcd39ec4"
+            ]
+        ]
+    },
+    {
+        "id": "1c0f4d5fbcd39ec4",
+        "type": "ui_gauge",
+        "z": "3b379457e588837b",
+        "name": "Umidade",
+        "group": "ui_group_env",
+        "order": 2,
+        "width": "3",
+        "height": "3",
+        "gtype": "gage",
+        "title": "Umidade",
+        "label": "%",
+        "format": "{{value | number:1}}",
+        "min": "0",
+        "max": "100",
+        "seg1": "25",
+        "seg2": "70",
+        "x": 560,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "019a6b18cd584eba",
+        "type": "mqtt in",
+        "z": "3b379457e588837b",
+        "name": "Sub: pressao",
+        "topic": "dragon/telemetry/pressao",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "mqtt_broker_cfg",
+        "inputs": 0,
+        "x": 130,
+        "y": 240,
+        "wires": [
+            [
+                "bf33f98aabfa0872"
+            ]
+        ]
+    },
+    {
+        "id": "bf33f98aabfa0872",
+        "type": "function",
+        "z": "3b379457e588837b",
+        "name": "Parse Pressao",
+        "func": "msg.payload = msg.payload.pressao;\nreturn msg;",
+        "outputs": 1,
+        "x": 340,
+        "y": 240,
+        "wires": [
+            [
+                "c211a17f031a8ebc",
+                "eadb2b08a5f4ccf3"
+            ]
+        ]
+    },
+    {
+        "id": "c211a17f031a8ebc",
+        "type": "ui_gauge",
+        "z": "3b379457e588837b",
+        "name": "Pressão",
+        "group": "ui_group_env",
+        "order": 3,
+        "width": "3",
+        "height": "3",
+        "gtype": "gage",
+        "title": "Pressão",
+        "label": "hPa",
+        "format": "{{value | number:1}}",
+        "min": "900",
+        "max": "1100",
+        "seg1": "980",
+        "seg2": "1040",
+        "x": 560,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "eadb2b08a5f4ccf3",
+        "type": "ui_chart",
+        "z": "3b379457e588837b",
+        "name": "Gráfico Pressão",
+        "group": "ui_group_charts",
+        "order": 2,
+        "width": "6",
+        "height": "4",
+        "label": "Pressão (hPa)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Aguardando dados...",
+        "dot": false,
+        "ymin": "950",
+        "ymax": "1070",
+        "removeOlder": "10",
+        "removeOlderPoints": "200",
+        "removeOlderUnit": "60",
+        "outputs": 1,
+        "x": 560,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "36c356c4f601d4b2",
+        "type": "mqtt in",
+        "z": "3b379457e588837b",
+        "name": "Sub: oxigenio",
+        "topic": "dragon/telemetry/oxigenio",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "mqtt_broker_cfg",
+        "inputs": 0,
+        "x": 130,
+        "y": 340,
+        "wires": [
+            [
+                "a0573c8a3cfd5f88"
+            ]
+        ]
+    },
+    {
+        "id": "a0573c8a3cfd5f88",
+        "type": "function",
+        "z": "3b379457e588837b",
+        "name": "Parse O2",
+        "func": "msg.payload = msg.payload.oxigenio;\nreturn msg;",
+        "outputs": 1,
+        "x": 340,
+        "y": 340,
+        "wires": [
+            [
+                "e50381551a467e07",
+                "0b0a992036c9dd1e"
+            ]
+        ]
+    },
+    {
+        "id": "e50381551a467e07",
+        "type": "ui_gauge",
+        "z": "3b379457e588837b",
+        "name": "Oxigênio",
+        "group": "ui_group_life",
+        "order": 1,
+        "width": "3",
+        "height": "3",
+        "gtype": "gage",
+        "title": "Oxigênio (O₂)",
+        "label": "%",
+        "format": "{{value | number:1}}",
+        "min": "12",
+        "max": "30",
+        "seg1": "18",
+        "seg2": "24",
+        "x": 560,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "0b0a992036c9dd1e",
+        "type": "ui_chart",
+        "z": "3b379457e588837b",
+        "name": "Gráfico O2",
+        "group": "ui_group_charts",
+        "order": 3,
+        "width": "6",
+        "height": "4",
+        "label": "O₂ (%)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Aguardando dados...",
+        "dot": false,
+        "ymin": "12",
+        "ymax": "30",
+        "removeOlder": "10",
+        "removeOlderPoints": "200",
+        "removeOlderUnit": "60",
+        "outputs": 1,
+        "x": 560,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2e622b78ef6ebef4",
+        "type": "mqtt in",
+        "z": "3b379457e588837b",
+        "name": "Sub: radiacao",
+        "topic": "dragon/telemetry/radiacao",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "mqtt_broker_cfg",
+        "inputs": 0,
+        "x": 130,
+        "y": 420,
+        "wires": [
+            [
+                "92802b580ba07783"
+            ]
+        ]
+    },
+    {
+        "id": "92802b580ba07783",
+        "type": "function",
+        "z": "3b379457e588837b",
+        "name": "Parse Radiacao",
+        "func": "msg.payload = msg.payload.radiacao;\nreturn msg;",
+        "outputs": 1,
+        "x": 340,
+        "y": 420,
+        "wires": [
+            [
+                "0d17a25862bc3a71",
+                "836961494f3d2578"
+            ]
+        ]
+    },
+    {
+        "id": "0d17a25862bc3a71",
+        "type": "ui_gauge",
+        "z": "3b379457e588837b",
+        "name": "Radiação",
+        "group": "ui_group_life",
+        "order": 2,
+        "width": "3",
+        "height": "3",
+        "gtype": "gage",
+        "title": "Radiação",
+        "label": "µSv/h",
+        "format": "{{value | number:2}}",
+        "min": "0",
+        "max": "30",
+        "seg1": "5",
+        "seg2": "20",
+        "x": 560,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "836961494f3d2578",
+        "type": "ui_chart",
+        "z": "3b379457e588837b",
+        "name": "Gráfico Radiação",
+        "group": "ui_group_charts",
+        "order": 4,
+        "width": "6",
+        "height": "4",
+        "label": "Radiação (µSv/h)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Aguardando dados...",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "30",
+        "removeOlder": "10",
+        "removeOlderPoints": "200",
+        "removeOlderUnit": "60",
+        "outputs": 1,
+        "x": 560,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4a9853e28a70184c",
+        "type": "mqtt in",
+        "z": "3b379457e588837b",
+        "name": "Sub: aceleracao",
+        "topic": "dragon/telemetry/aceleracao",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "mqtt_broker_cfg",
+        "inputs": 0,
+        "x": 130,
+        "y": 520,
+        "wires": [
+            [
+                "61050532524ccf86"
+            ]
+        ]
+    },
+    {
+        "id": "61050532524ccf86",
+        "type": "function",
+        "z": "3b379457e588837b",
+        "name": "Parse Accel",
+        "func": "var mag = msg.payload.magnitude;\nmsg.payload = mag;\nreturn msg;",
+        "outputs": 1,
+        "x": 340,
+        "y": 520,
+        "wires": [
+            [
+                "b7c3d3588d997be4",
+                "27905b7d93fe5a8c"
+            ]
+        ]
+    },
+    {
+        "id": "b7c3d3588d997be4",
+        "type": "ui_gauge",
+        "z": "3b379457e588837b",
+        "name": "Aceleração",
+        "group": "ui_group_motion",
+        "order": 1,
+        "width": "6",
+        "height": "3",
+        "gtype": "gage",
+        "title": "Aceleração / Vibração",
+        "label": "g",
+        "format": "{{value | number:2}}",
+        "min": "0",
+        "max": "6",
+        "seg1": "2.5",
+        "seg2": "4.5",
+        "x": 560,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "27905b7d93fe5a8c",
+        "type": "ui_chart",
+        "z": "3b379457e588837b",
+        "name": "Gráfico Aceleração",
+        "group": "ui_group_charts",
+        "order": 5,
+        "width": "6",
+        "height": "4",
+        "label": "Aceleração (g)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Aguardando dados...",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "6",
+        "removeOlder": "10",
+        "removeOlderPoints": "200",
+        "removeOlderUnit": "60",
+        "outputs": 1,
+        "x": 560,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3b855e9776f98f90",
+        "type": "mqtt in",
+        "z": "3b379457e588837b",
+        "name": "Sub: status",
+        "topic": "dragon/telemetry/status",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "mqtt_broker_cfg",
+        "inputs": 0,
+        "x": 130,
+        "y": 620,
+        "wires": [
+            [
+                "9bd839d877d74629"
+            ]
+        ]
+    },
+    {
+        "id": "9bd839d877d74629",
+        "type": "function",
+        "z": "3b379457e588837b",
+        "name": "Parse Status + Cor",
+        "func": "var nivel = msg.payload.nivel;\nvar desc  = msg.payload.descricao;\n\nvar cor = '#00c400';\nif (nivel === 1) cor = '#e6a817';\nif (nivel === 2) cor = '#e60000';\n\n// saída 1 → texto de status (sempre)\nvar textMsg = RED.util.cloneMessage(msg);\ntextMsg.payload = desc;\ntextMsg.style   = { color: cor, 'font-size': '24px', 'font-weight': 'bold' };\n\n// saída 2 → toast (somente WARNING ou CRITICAL)\nvar alertMsg = null;\nif (nivel >= 1) {\n    var icone = nivel === 1 ? '⚠️' : '🔴';\n    alertMsg = RED.util.cloneMessage(msg);\n    alertMsg.payload = icone + ' ' + desc + ' — nível ' + nivel;\n    alertMsg.topic   = nivel === 2 ? 'error' : 'warning';\n}\n\nreturn [textMsg, alertMsg];",
+        "outputs": 2,
+        "x": 340,
+        "y": 620,
+        "wires": [
+            [
+                "a94a4001d95a2e99"
+            ],
+            [
+                "fc9d0b100dd3bc13"
+            ]
+        ]
+    },
+    {
+        "id": "a94a4001d95a2e99",
+        "type": "ui_text",
+        "z": "3b379457e588837b",
+        "group": "ui_group_status",
+        "order": 1,
+        "width": "6",
+        "height": "2",
+        "name": "Status Missão",
+        "format": "{{msg.payload}}",
+        "x": 570,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "fc9d0b100dd3bc13",
+        "type": "ui_toast",
+        "z": "3b379457e588837b",
+        "position": "top right",
+        "displayTime": "5",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "topic": "",
+        "name": "Notificação Alerta",
+        "x": 570,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "087aa59dbfa94de4",
+        "type": "mqtt in",
+        "z": "3b379457e588837b",
+        "name": "Sub: full payload",
+        "topic": "dragon/telemetry/full",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "mqtt_broker_cfg",
+        "inputs": 0,
+        "x": 130,
+        "y": 720,
+        "wires": [
+            [
+                "12baccfa5da0491f"
+            ]
+        ]
+    },
+    {
+        "id": "12baccfa5da0491f",
+        "type": "debug",
+        "z": "3b379457e588837b",
+        "name": "Full Payload Debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 370,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "mqtt_broker_cfg",
+        "type": "mqtt-broker",
+        "name": "HiveMQ Cloud",
+        "broker": "efedf4b853574cef8100661792bd568a.s1.eu.hivemq.cloud",
+        "port": "8883",
+        "tls": "tls-hivemq",
+        "clientid": "NodeRED-Dragon",
+        "autoConnect": true,
+        "usetls": true,
+        "protocolVersion": "5",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "ui_group_env",
+        "type": "ui_group",
+        "name": "🌡️ Ambiente",
+        "tab": "ui_tab_dragon",
+        "order": 1,
+        "disp": true,
+        "width": "6"
+    },
+    {
+        "id": "ui_group_charts",
+        "type": "ui_group",
+        "name": "📊 Histórico",
+        "tab": "ui_tab_dragon",
+        "order": 5,
+        "disp": true,
+        "width": "12"
+    },
+    {
+        "id": "ui_group_life",
+        "type": "ui_group",
+        "name": "🧪 Suporte de Vida",
+        "tab": "ui_tab_dragon",
+        "order": 2,
+        "disp": true,
+        "width": "6"
+    },
+    {
+        "id": "ui_group_motion",
+        "type": "ui_group",
+        "name": "📡 Aceleração",
+        "tab": "ui_tab_dragon",
+        "order": 3,
+        "disp": true,
+        "width": "6"
+    },
+    {
+        "id": "ui_group_status",
+        "type": "ui_group",
+        "name": "🚨 Status da Missão",
+        "tab": "ui_tab_dragon",
+        "order": 4,
+        "disp": true,
+        "width": "6"
+    },
+    {
+        "id": "tls-hivemq",
+        "type": "tls-config",
+        "name": "HiveMQ TLS",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false
+    },
+    {
+        "id": "ui_tab_dragon",
+        "type": "ui_tab",
+        "name": "Dragon Capsule",
+        "icon": "rocket",
+        "order": 1
+    },
+    {
+        "id": "a9c6161612acf8cb",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]
