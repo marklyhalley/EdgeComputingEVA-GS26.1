@@ -1,0 +1,169 @@
+================================================================================
+                  DRAGON CAPSULE — SISTEMA DE TELEMETRIA IoT
+                       Missão: SpaceX-Dragon-ISS
+                       device_id: dragon-capsule-001
+================================================================================
+
+DESCRIÇÃO GERAL
+---------------
+O projeto Dragon Capsule é uma simulação de sistema de telemetria para uma
+cápsula espacial inspirada na missão SpaceX Dragon acoplada à ISS (Estação
+Espacial Internacional). O sistema coleta, transmite, processa e visualiza
+dados ambientais e de suporte de vida em tempo real, utilizando uma arquitetura
+IoT completa com três camadas distintas: dispositivo, broker/processamento e
+visualização.
+
+--------------------------------------------------------------------------------
+CAMADA 1 — DISPOSITIVO (Wokwi + ESP32)
+--------------------------------------------------------------------------------
+Plataforma de Simulação: Wokwi (https://wokwi.com/projects/465809120774624257)
+Microcontrolador: ESP32 DevKit
+
+Sensores simulados:
+  - DHT22         : Temperatura e Umidade relativa do ar
+                    Interface: GPIO 15
+  - BMP085        : Pressão atmosférica
+                    Interface: I²C (SDA/SCL)
+  - MPU6050       : Acelerômetro de 3 eixos (accel_x, accel_y, accel_z)
+                    Interface: I²C (SDA/SCL)
+  - Potenciômetro 1: Simulação do nível de Oxigênio (O₂)
+                    Interface: ADC GPIO 34
+  - Potenciômetro 2: Simulação do nível de Radiação
+                    Interface: ADC GPIO 35
+
+Bibliotecas utilizadas (Arduino C++):
+  - WiFi.h
+  - WiFiClientSecure.h
+  - PubSubClient.h
+  - ArduinoJson.h
+  - DHT.h
+  - Adafruit_BMP085.h
+  - Adafruit_MPU6050.h
+  - Adafruit_Sensor.h
+
+Configuração de rede e publicação:
+  - Conexão WiFi: Wokwi-GUEST (simulada)
+  - Protocolo: MQTT sobre TLS (WiFiClientSecure)
+  - Broker: HiveMQ Cloud — porta 8883
+  - Usuário MQTT: dragon_user
+  - Intervalo de publicação: 3000ms (3 segundos)
+  - QoS: 1 (at least once delivery)
+
+Tópicos MQTT publicados pelo dispositivo:
+  - dragon/telemetry/temperatura   → {"temperatura": <float>}
+  - dragon/telemetry/umidade       → {"umidade": <float>}
+  - dragon/telemetry/pressao       → {"pressao": <float>}
+  - dragon/telemetry/oxigenio      → {"oxigenio": <float>}
+  - dragon/telemetry/radiacao      → {"radiacao": <float>}
+  - dragon/telemetry/aceleracao    → {"accel_x": <f>, "accel_y": <f>, "accel_z": <f>, "magnitude": <f>}
+  - dragon/telemetry/status        → status geral da missão (ex: "CRITICAL")
+  - dragon/telemetry/full          → payload completo com todos os campos,
+                                     incluindo device_id, mission, ts_ms,
+                                     environment e life_support
+
+Saída serial do dispositivo (exemplo):
+  [DRAGON] Temp: 23.5 C | Umid: 69.0% | Pres: 882.5 hPa
+  [DRAGON] O2: 20.4% | Rad: 12.8 uSv/h | Accel: 1.52 g
+  [DRAGON] Status: CRITICAL | MQTT: ON
+
+--------------------------------------------------------------------------------
+CAMADA 2 — BROKER + PROCESSAMENTO (HiveMQ Cloud + Node-RED)
+--------------------------------------------------------------------------------
+
+BROKER — HiveMQ Cloud
+  - Plano: Free #1
+  - Organização: FIAP
+  - Host: efedf4b853574cef8100661792bd568a.s1.eu.hivemq.cloud
+  - Porta: 8883 (TLS/SSL)
+  - Autenticação: usuário e senha (dragon_user / Dragon@1234)
+  - QoS: 1
+  - WebClient conectado para monitoramento em tempo real
+
+PROCESSAMENTO — Node-RED (flow: Dragon Telemetry)
+  O Node-RED assina todos os tópicos MQTT e processa cada mensagem
+  através de nós de função (function nodes) antes de encaminhar
+  ao dashboard. Estrutura do flow:
+
+  Sub: temperatura  →  Parse Temp        →  Gauge Temperatura + Chart Temperatura
+  Sub: umidade      →  Parse Umidade     →  Gauge Umidade
+  Sub: pressao      →  Parse Pressao     →  Gauge Pressão + Chart Pressão
+  Sub: oxigenio     →  Parse O2          →  Gauge Oxigênio + Chart O₂
+  Sub: radiacao     →  Parse Radiacao    →  Gauge Radiação + Chart Radiação
+  Sub: aceleracao   →  Parse Accel       →  Gauge Aceleração + Chart Aceleração
+  Sub: status       →  Parse Status+Cor  →  Text Status da Missão + Notificação Alerta
+
+  Payload completo recebido (dragon/telemetry/full):
+    {
+      device_id: "dragon-capsule-001",
+      mission: "SpaceX-Dragon-ISS",
+      ts_ms: <timestamp>,
+      environment: { ... },
+      life_support: { ... }
+    }
+
+--------------------------------------------------------------------------------
+CAMADA 3 — VISUALIZAÇÃO (Node-RED Dashboard)
+--------------------------------------------------------------------------------
+Interface: Node-RED Dashboard v3
+Título: Dragon Capsule
+Protocolo de acesso: HTTP + WebSocket (atualização em tempo real)
+
+Seções e nós de UI:
+
+  [AMBIENTE]
+    - Gauge Temperatura    (faixa: -10 a 50 °C)
+    - Gauge Umidade        (faixa: 0 a 100 %)
+    - Gauge Pressão        (faixa: 900 a 1100 hPa)
+
+  [SUPORTE DE VIDA]
+    - Gauge Oxigênio       (faixa: 12 a 30 %)
+    - Gauge Radiação       (faixa: 0 a 30 µSv/h)
+
+  [ACELERAÇÃO]
+    - Gauge Aceleração/Vibração  (faixa: 0 a 6 g)
+
+  [STATUS DA MISSÃO]
+    - Text Status          (exibe o estado atual: OK / WARNING / CRITICAL)
+    - Notificação Alerta   (disparo de alerta em condições críticas)
+
+  [HISTÓRICO — Charts]
+    - Chart Temperatura    (°C ao longo do tempo)
+    - Chart Pressão        (hPa ao longo do tempo)
+    - Chart O₂             (% ao longo do tempo)
+    - Chart Radiação       (µSv/h ao longo do tempo)
+    - Chart Aceleração     (g ao longo do tempo)
+
+--------------------------------------------------------------------------------
+FLUXO DE DADOS (END-TO-END)
+--------------------------------------------------------------------------------
+
+  ESP32 (Wokwi)
+      |
+      |  WiFi + TLS — MQTT :8883 — QoS 1
+      v
+  HiveMQ Cloud (Broker MQTT)
+      |
+      |  Subscribe (7 tópicos) — QoS 1
+      v
+  Node-RED (Processamento / Parse)
+      |
+      |  HTTP + WebSocket
+      v
+  Node-RED Dashboard (Visualização em tempo real)
+
+--------------------------------------------------------------------------------
+TECNOLOGIAS E FERRAMENTAS
+--------------------------------------------------------------------------------
+  - Linguagem firmware : Arduino C++
+  - Simulador          : Wokwi
+  - Microcontrolador   : ESP32 DevKit
+  - Protocolo IoT      : MQTT v3.1 com TLS 1.2/1.3
+  - Broker             : HiveMQ Cloud (Free Tier)
+  - Processamento      : Node-RED v3
+  - Visualização       : Node-RED Dashboard v3
+  - Serialização       : JSON (ArduinoJson)
+  - Organização        : FIAP
+
+================================================================================
+                            FIM DO DOCUMENTO
+================================================================================
