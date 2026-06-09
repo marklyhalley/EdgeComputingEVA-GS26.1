@@ -1,0 +1,109 @@
+{
+  "version": 1,
+  "author": "Sofia Rodrigues",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 76.8, "left": 254.44, "attrs": {} },
+    {
+      "type": "wokwi-dht22",
+      "id": "dht1",
+      "top": -18.9,
+      "left": 4.2,
+      "attrs": { "color": "white", "temperature": "23.5", "humidity": "69" }
+    },
+    { "type": "wokwi-mpu6050", "id": "mpu1", "top": -15.38, "left": 395.92, "attrs": {} },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "pot_o2",
+      "top": 60,
+      "left": 640,
+      "attrs": { "label": "O2 Level (14-28%)", "value": "0.5" }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "pot_rad",
+      "top": 200.3,
+      "left": 643,
+      "attrs": { "label": "Radiation (0-30 uSv/h)", "value": "0.1" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_green",
+      "top": 438,
+      "left": 42.2,
+      "attrs": { "color": "green", "label": "OK" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_yellow",
+      "top": 438,
+      "left": 128.6,
+      "attrs": { "color": "yellow", "label": "WARNING" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_red",
+      "top": 380,
+      "left": 200,
+      "attrs": { "color": "red", "label": "CRITICAL" }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "buz1",
+      "top": 396,
+      "left": 558.6,
+      "attrs": { "volume": "0.5" }
+    },
+    { "type": "wokwi-resistor", "id": "r1", "top": 370, "left": 30, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "r2", "top": 370, "left": 100, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "r3", "top": 370, "left": 170, "attrs": { "value": "220" } },
+    {
+      "type": "board-bmp180",
+      "id": "bmp2",
+      "top": -61.76,
+      "left": 163.46,
+      "attrs": { "pressure": "99750", "temperature": "-40" }
+    }
+  ],
+  "connections": [
+    [ "esp:3V3", "dht1:VCC", "red", [] ],
+    [ "esp:GND", "dht1:GND", "black", [] ],
+    [ "esp:15", "dht1:SDA", "green", [] ],
+    [ "esp:3V3", "bmp2:VIN", "red", [] ],
+    [ "esp:GND", "bmp2:GND", "black", [] ],
+    [ "esp:21", "bmp2:SDA", "blue", [] ],
+    [ "esp:22", "bmp2:SCL", "yellow", [] ],
+    [ "esp:3V3", "mpu1:VCC", "red", [] ],
+    [ "esp:GND", "mpu1:GND", "black", [] ],
+    [ "esp:21", "mpu1:SDA", "blue", [] ],
+    [ "esp:22", "mpu1:SCL", "yellow", [] ],
+    [ "esp:34", "pot_o2:SIG", "orange", [] ],
+    [ "esp:3V3", "pot_o2:VCC", "red", [] ],
+    [ "esp:GND", "pot_o2:GND", "black", [] ],
+    [ "esp:35", "pot_rad:SIG", "orange", [] ],
+    [ "esp:3V3", "pot_rad:VCC", "red", [] ],
+    [ "esp:GND", "pot_rad:GND", "black", [] ],
+    [ "esp:25", "r1:1", "limegreen", [] ],
+    [ "r1:2", "led_green:A", "limegreen", [] ],
+    [ "led_green:C", "esp:GND", "black", [] ],
+    [ "esp:26", "r2:1", "gold", [] ],
+    [ "r2:2", "led_yellow:A", "gold", [] ],
+    [ "led_yellow:C", "esp:GND", "black", [] ],
+    [ "esp:27", "r3:1", "red", [] ],
+    [ "r3:2", "led_red:A", "red", [] ],
+    [ "led_red:C", "esp:GND", "black", [] ],
+    [ "esp:14", "buz1:1", "purple", [] ],
+    [ "buz1:2", "esp:GND", "black", [] ],
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "esp:GND.2", "mpu1:GND", "black", [ "v-153.6", "h105.6" ] ],
+    [ "esp:GND.2", "pot_rad:GND", "black", [ "v220.8", "h307.2" ] ],
+    [ "esp:GND.3", "pot_o2:GND", "black", [ "h0" ] ],
+    [ "esp:GND.1", "led_red:C", "black", [ "h0" ] ],
+    [ "esp:GND.1", "led_yellow:C", "black", [ "h0" ] ],
+    [ "esp:GND.1", "led_green:C", "black", [ "h0" ] ],
+    [ "esp:GND.1", "dht1:GND", "black", [ "h0" ] ],
+    [ "esp:GND.2", "bmp2:GND", "black", [ "v0" ] ]
+  ],
+  "dependencies": {}
+}
