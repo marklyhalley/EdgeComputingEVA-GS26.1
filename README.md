@@ -28,18 +28,18 @@ O **Node-RED** recebe as mensagens do broker, processa os fluxos de telemetria e
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                     DRAGON CAPSULE (Wokwi)                      │
-│                                                                  │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌───────────────┐  │
-│  │  DHT22   │  │  BMP180  │  │ MPU-6050 │  │  Pot O₂ / Rad │  │
-│  │GPIO 15   │  │  I2C     │  │  I2C     │  │  GPIO 34 / 35 │  │
-│  │Temp+Umid │  │ Pressão  │  │Aceleração│  │  O₂ / Radiação│  │
-│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └──────┬────────┘  │
-│       └─────────────┴─────────────┴────────────────┘           │
-│                            ESP32                                 │
-│                    (Processamento Local)                         │
-│                    Avalia limiares                               │
-│                    LEDs + Buzzer                                  │
-│                    GPIO 25/26/27/14                              │
+│                                                                 │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌───────────────┐    │
+│  │  DHT22   │  │  BMP180  │  │ MPU-6050 │  │  Pot O₂ / Rad │    │
+│  │GPIO 15   │  │  I2C     │  │  I2C     │  │  GPIO 34 / 35 │    │
+│  │Temp+Umid │  │ Pressão  │  │Aceleração│  │  O₂ / Radiação│    │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └──────┬────────┘    │
+│       └─────────────┴─────────────┴────────────────┘            │
+│                            ESP32                                │
+│                    (Processamento Local)                        │
+│                    Avalia limiares                              │
+│                    LEDs + Buzzer                                │
+│                    GPIO 25/26/27/14                             │
 └───────────────────────────┬─────────────────────────────────────┘
                             │ MQTT over TLS (porta 8883)
                             ▼
